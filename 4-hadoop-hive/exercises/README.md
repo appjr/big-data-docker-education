@@ -918,6 +918,105 @@ After completing all exercises, verify:
 - Reduce data processing batch size
 - Check for data skew issues
 
+**JAVA_HOME error**
+```bash
+#Turn off services
+pkill -f Hive
+stop-dfs.sh
+stop-yarn.sh
+
+#Once services are turned off, open hadoop-env.sh file:
+nano $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+#Add the following configuration to the bottom of the file
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
+#Turn on services
+start-dfs.sh
+start-yarn.sh
+
+#Double check that namenode, datanode, resourcemanager are active
+jps
+```
+**Metastore Creation Failed**
+```bash
+#Make the following changes if metastore creation failed during step 3: schematool -dbType derby -initSchema
+
+#Turn off Hive services
+pkill -f Hive
+
+#Open hive-site.xml file
+nano /opt/hive/conf/hive-site.xml
+
+#Modify the following line
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>APP</value>
+    <description>Username to use against metastore database</description>
+  </property>
+
+#Add the following
+<property>
+	<name>datanucleus.schemaName</name>
+	<value>APP</value>
+</property>
+
+#Remove old metastore
+rm -rf /home/hadoop/metastore_db
+
+#Create new metastore
+schematool -dbType derby -initSchema --verbose \ -userName APP \ -url 'jdbc:derby:;databaseName=/home/hadoop/metastore_db;create=true'
+```
+
+**Java version conflict**
+```bash
+#If metastore creation was successful, but Hive will not start due to a Java version mismatch, downgrade to Java version 8
+
+sudo su
+
+apt-get update && apt-get install -y openjdk-8-jdk
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+
+#Check java version 
+java -version
+
+#Make permanant changes to reflect java modifications
+stop-dfs.sh
+stop-yarn.sh
+pkill -f Hive
+
+#Double check that services are off
+jps
+
+#Once services are turned off, open hadoop-env.sh file:
+nano $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+#Modify the following configuration and save:
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+#Open hive-env.sh
+nano /opt/hive/conf/hive-env.sh
+
+#Edit the following line and save:
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+#Start services
+start-dfs.sh
+start-yarn.sh
+
+hive --service metastore & 
+hive --service hiveserver2 &
+
+#Check services
+jps
+
+#Start Hive
+Hive
+```
+
+
 ## Next Steps
 
 Once you've completed these exercises successfully, you're ready to move on to the Spark image, which will add advanced big data processing capabilities including machine learning and stream processing.
