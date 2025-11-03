@@ -79,6 +79,9 @@ After completing all exercises, verify:
 - [ ] Know how to integrate Spark with Hive
 - [ ] Can optimize Spark applications for performance
 
+## Troubleshooting Guide
+Please see the troubleshooting guide under 4-hadoop-hive exercises to resolve common issues related to: JAVA_HOME, schematool, and Java version. 
+
 ## Next Steps
 
 This completes the big data Docker education series. You now have comprehensive environments for learning:
