@@ -222,7 +222,7 @@ Learn to work with Spark's structured APIs: DataFrames and Datasets.
    val employeesDF = spark.read
      .option("header", "true")
      .option("inferSchema", "true")
-     .csv("hdfs://namenode:9000/user/hadoop/spark-data/employees.csv")
+     .csv("hdfs://localhost:9000/user/hadoop/spark-data/employees.csv")
    
    employeesDF.show()
    employeesDF.printSchema()
@@ -285,20 +285,20 @@ Learn to work with Spark's structured APIs: DataFrames and Datasets.
    employeesDF.write
      .option("header", "true")
      .mode("overwrite")
-     .csv("hdfs://namenode:9000/user/hadoop/spark-output/employees-csv")
+     .csv("hdfs://localhost:9000/user/hadoop/spark-output/employees-csv")
    
    // Write as JSON
    employeesDF.write
      .mode("overwrite")
-     .json("hdfs://namenode:9000/user/hadoop/spark-output/employees-json")
+     .json("hdfs://localhost:9000/user/hadoop/spark-output/employees-json")
    
    // Write as Parquet (columnar format)
    employeesDF.write
      .mode("overwrite")
-     .parquet("hdfs://namenode:9000/user/hadoop/spark-output/employees-parquet")
+     .parquet("hdfs://localhost:9000/user/hadoop/spark-output/employees-parquet")
    
    // Read back Parquet
-   val parquetDF = spark.read.parquet("hdfs://namenode:9000/user/hadoop/spark-output/employees-parquet")
+   val parquetDF = spark.read.parquet("hdfs://localhost:9000/user/hadoop/spark-output/employees-parquet")
    parquetDF.show()
    ```
 
@@ -397,7 +397,7 @@ Learn to use SQL queries with Spark DataFrames and integrate with Hive.
    // Write to Parquet
    highEarnersDF.write
      .mode("overwrite")
-     .parquet("hdfs://namenode:9000/user/hadoop/spark-output/high-earners")
+     .parquet("hdfs://localhost:9000/user/hadoop/spark-output/high-earners")
    ```
 
 4. **Global temporary views:**
@@ -580,7 +580,7 @@ Learn to integrate Spark with Hive for seamless data warehouse operations.
    ```bash
    # Start Spark Shell with Hive support
    spark-shell --master local[2] \
-     --conf spark.sql.warehouse.dir=hdfs://namenode:9000/user/hive/warehouse \
+     --conf spark.sql.warehouse.dir=hdfs://localhost:9000/user/hive/warehouse \
      --conf spark.sql.catalogImplementation=hive
    ```
 
