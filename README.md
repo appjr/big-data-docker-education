@@ -14,6 +14,8 @@ This repository contains a series of Docker images designed for teaching big dat
 4-hadoop-hive (+ Hive + Derby)
     ↓
 5-hadoop-spark (+ Spark)
+    ↓
+6-jupyter-spark (+ Jupyter Lab)
 ```
 
 ## Images Overview
@@ -47,10 +49,18 @@ This repository contains a series of Docker images designed for teaching big dat
 
 ### 5. Hadoop Spark (`5-hadoop-spark`)
 - **Base**: hadoop-hive
-- **Components**: Spark 3.4.1
+- **Components**: Spark 3.5.7
 - **Purpose**: Fast, unified analytics engine for big data
-- **Ports**: 4040 (Spark UI), 18080 (History Server)
+- **Ports**: 4040 (Spark UI), 18080 (History Server), 8080 (Master UI)
 - **Size**: ~2.0GB
+
+### 6. Jupyter with Spark (`6-jupyter-spark`)
+- **Base**: hadoop-spark
+- **Components**: Jupyter Lab, PySpark, Data Science libraries (pandas, numpy, matplotlib, seaborn, plotly)
+- **Purpose**: Interactive data analysis and visualization with Spark
+- **Ports**: 8888 (Jupyter Lab), plus all Spark/Hadoop ports
+- **Additional Features**: Multiple kernels (Python, Scala, SQL), Apache Toree
+- **Size**: ~2.5GB
 
 ## Quick Start
 
@@ -97,6 +107,16 @@ docker run -it --name big-data-complete \
   -p 4040:4040 -p 18080:18080 \
   hadoop-spark
 ```
+
+#### Interactive Jupyter Environment (Recommended for Learning)
+```bash
+docker run -it --name jupyter-bigdata \
+  -p 8888:8888 -p 9870:9870 -p 8088:8088 \
+  -p 4040:4040 -p 8080:8080 \
+  jupyter-spark
+```
+
+Then access Jupyter Lab at: **http://localhost:8888** (no password required)
 
 ## Web Interfaces
 
@@ -284,7 +304,7 @@ For educational support:
 | Ubuntu | 20.04 LTS | Base operating system |
 | OpenJDK | 11 | Java runtime |
 | Hadoop | 3.3.6 | Core big data platform |
-| Spark | 3.4.1 | Analytics engine |
+| Spark | 3.5.7 | Analytics engine |
 | Hive | 3.1.3 | Data warehouse |
 | Sqoop | 1.4.7 | Data transfer tool |
 | Flume | 1.11.0 | Data ingestion |

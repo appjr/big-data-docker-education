@@ -90,10 +90,38 @@ services:
     stdin_open: true
     tty: true
 
+  jupyter-spark:
+    build: ./6-jupyter-spark
+    image: jupyter-spark:latest
+    container_name: jupyter-spark-container
+    ports:
+      - "8888:8888"    # Jupyter Lab
+      - "9870:9870"
+      - "8088:8088"
+      - "9864:9864"
+      - "8042:8042"
+      - "19888:19888"
+      - "9000:9000"
+      - "10000:10000"
+      - "10002:10002"
+      - "4040:4040"    # Spark Web UI
+      - "18080:18080"  # Spark History Server
+      - "7077:7077"    # Spark Master
+      - "8080:8080"    # Spark Master Web UI
+    volumes:
+      - ./shared-data:/home/hadoop/shared-data
+      - hadoop-data:/tmp/hadoop-hadoop
+      - hive-data:/opt/hive/warehouse
+      - spark-data:/opt/spark/work
+      - jupyter-notebooks:/home/hadoop/notebooks
+    stdin_open: true
+    tty: true
+
 volumes:
   hadoop-data:
   hive-data:
   spark-data:
+  jupyter-notebooks:
 
 networks:
   default:
